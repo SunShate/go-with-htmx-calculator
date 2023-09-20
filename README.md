@@ -8,5 +8,5 @@ round brackets included
 In the source directory execute
 
 ```sh
-go run ./main.go
+go run ./main.go Albert
 ```
