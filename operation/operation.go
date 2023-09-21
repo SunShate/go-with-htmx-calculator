@@ -5,24 +5,20 @@ import (
 )
 
 type operation struct {
-	firstOperand  float64
-	secondOperand float64
+	firstOperand  uint64
+	secondOperand uint64
 	_type         uint8
 }
 
-func New(firstOperand float64, secondOperand float64, _operation uint8) operation {
+func New(firstOperand uint64, secondOperand uint64, _operation uint8) operation {
 	op := operation{firstOperand, secondOperand, _operation}
 	return op
 }
 
-func Compute(e operation) float64 {
-	var result float64
+func Compute(e operation) uint64 {
+	var result uint64
 
 	switch e._type {
-	case 37:
-		first := int64(e.firstOperand)
-		second := int64(e.secondOperand)
-		result = float64(first % second)
 	case 43:
 		result = e.firstOperand + e.secondOperand
 	case 42:
@@ -32,7 +28,7 @@ func Compute(e operation) float64 {
 	case 47:
 		result = e.firstOperand / e.secondOperand
 	default:
-		fmt.Printf("Error: Unsupported operation! %v", string(e._type))
+		fmt.Printf("Error: Unsupported operation! \"%v\"", e._type)
 	}
 
 	return result
