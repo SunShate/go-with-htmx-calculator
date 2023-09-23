@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -11,12 +11,18 @@ import (
 	"calculator/conversion"
 )
 
+type Expression struct {
+	InfixExpr   string
+	PostfixExpr string
+	Result      uint64
+}
+
 func main() {
 	fmt.Println("Interface will be sooner")
 
 	arithmeticExpression := strings.Split(os.Args[1], " ")
 
-	// arithmetic expression to postfix expression converter
+	// convert arithmetic expression to postfix expression
 	postfixExpression, isError := conversion.BuildPostfix(arithmeticExpression)
 
 	if isError {
@@ -29,9 +35,15 @@ func main() {
 	result, isError := conversion.CalculateExpr(postfixExpression)
 	fmt.Printf("\nResult: %d\nError: %v\n", result, isError)
 
+	expression := Expression{
+		strings.Join(arithmeticExpression, ""),
+		strings.Join(postfixExpression, ""),
+		result,
+	}
+
 	h1 := func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, strings.Join(arithmeticExpression, ""))
-		io.WriteString(w, fmt.Sprintf("\nExpression result: %d\n", result))
+		tmpl := template.Must(template.ParseFiles("index.html"))
+		tmpl.Execute(w, expression)
 	}
 	http.HandleFunc("/", h1)
 

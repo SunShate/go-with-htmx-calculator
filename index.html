@@ -6,6 +6,9 @@
     <title>HTMX+Go Calculator</title>
 </head>
 <body>
-    There will be an htmx template
+    There will be an htmx template with input and compute
+    <p>Arithmetic expr: {{ .InfixExpr }}</p>
+    <p>Postfix expr: {{ .PostfixExpr }}</p>
+    <p>Result: {{ .Result }}</p>
 </body>
 </html>
