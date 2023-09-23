@@ -4,6 +4,13 @@ import (
 	"fmt"
 )
 
+var OperationPriorities = map[string]int{
+	"+": 1,
+	"-": 1,
+	"*": 2,
+	"/": 2,
+}
+
 type operation struct {
 	firstOperand  uint64
 	secondOperand uint64

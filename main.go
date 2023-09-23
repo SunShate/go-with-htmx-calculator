@@ -7,58 +7,39 @@ import (
 	"strings"
 
 	"calculator/operation"
+	"calculator/postfix"
+	"calculator/utils"
 )
-
-type Stack []interface{}
-
-func (s *Stack) IsEmpty() bool {
-	return len(*s) == 0
-}
-
-func (s *Stack) Push(obj interface{}) {
-	*s = append(*s, obj)
-}
-
-func (s *Stack) Pop() (interface{}, bool) {
-	if s.IsEmpty() {
-		return os.DevNull, false
-	} else {
-		index := len(*s) - 1
-		element := (*s)[index]
-		*s = (*s)[:index]
-		return element, true
-	}
-}
-
-func (s *Stack) Peek() interface{} {
-	if s.IsEmpty() {
-		return os.DevNull
-	} else {
-		index := len(*s) - 1
-		return (*s)[index]
-	}
-}
 
 func main() {
 	fmt.Println("Interface will add sooner")
 
-	var stack Stack
+	var stack utils.Stack
 	var firstValueMet, secondValueMet bool
 
 	// arithmetic expression to postfix expression converter
+	arithmeticExpression := strings.Split(os.Args[1], " ")
+	postfixExpression, isError := postfix.Build(arithmeticExpression)
 
-	postfixExpression := strings.Split(os.Args[1], " ")
+	if isError {
+		return
+	}
 
+	fmt.Println(postfixExpression)
+
+	// postfix calculation
 	for i := 0; i < len(postfixExpression); i++ {
 		lexem := postfixExpression[i]
 
 		switch lexem {
 		case "+", "-", "*", "/": // operations
 			if secondValueMet {
-				firstValue, _ := stack.Pop()
 				secondValue, _ := stack.Pop()
+				firstValue, _ := stack.Pop()
 
 				_operation := operation.New(firstValue.(uint64), secondValue.(uint64), uint8(lexem[0]))
+
+				fmt.Println(_operation)
 
 				computeResult := operation.Compute(_operation)
 
@@ -69,7 +50,13 @@ func main() {
 				}
 			}
 		default:
-			number, _ := strconv.Atoi(lexem) // convert char to int
+			var number int
+
+			if utils.NumberRegexp.MatchString(lexem) {
+				number, _ = strconv.Atoi(lexem) // convert char to int
+			} else {
+				return
+			}
 
 			if firstValueMet {
 				secondValueMet = true
@@ -82,4 +69,8 @@ func main() {
 	}
 
 	fmt.Println(stack.Pop())
+
+	if !stack.IsEmpty() {
+		fmt.Println("ERROR: INVALID EXPRESSION")
+	}
 }
