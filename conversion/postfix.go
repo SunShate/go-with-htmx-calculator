@@ -24,7 +24,7 @@ func BuildPostfix(infixExpr []string) ([]string, bool) {
 		case rightRoundBracket:
 			element, _ := opStack.Pop()
 
-			for element != nil &&
+			for !opStack.IsEmpty() &&
 				element != leftRoundBracket {
 
 				postfixExpr = append(postfixExpr, element.(string))
@@ -32,8 +32,7 @@ func BuildPostfix(infixExpr []string) ([]string, bool) {
 			}
 		case "+", "-", "*", "/":
 			element := opStack.Peek()
-			if element != nil &&
-				operation.OperationPriorities[element.(string)] != 0 &&
+			if !opStack.IsEmpty() &&
 				operation.OperationPriorities[element.(string)] >= operation.OperationPriorities[lexem] {
 
 				postfixExpr = append(postfixExpr, element.(string))
