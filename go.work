@@ -1,5 +1,5 @@
 go 1.18
 
 use ./operation
-use ./postfix
+use ./conversion
 use ./utils

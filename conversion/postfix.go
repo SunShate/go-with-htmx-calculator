@@ -1,4 +1,4 @@
-package postfix
+package conversion
 
 import (
 	"calculator/operation"
@@ -9,7 +9,7 @@ import (
 const rightRoundBracket = ")"
 const leftRoundBracket = "("
 
-func Build(infixExpr []string) ([]string, bool) {
+func BuildPostfix(infixExpr []string) ([]string, bool) {
 	var postfixExpr []string
 
 	var opStack utils.Stack

@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"calculator/conversion"
 	"calculator/operation"
-	"calculator/postfix"
 	"calculator/utils"
 )
 
@@ -19,7 +19,7 @@ func main() {
 
 	// arithmetic expression to postfix expression converter
 	arithmeticExpression := strings.Split(os.Args[1], " ")
-	postfixExpression, isError := postfix.Build(arithmeticExpression)
+	postfixExpression, isError := conversion.BuildPostfix(arithmeticExpression)
 
 	if isError {
 		return
