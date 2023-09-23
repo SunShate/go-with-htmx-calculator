@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"os"
 	"strings"
 
@@ -25,4 +28,12 @@ func main() {
 	// postfix calculation
 	result, isError := conversion.CalculateExpr(postfixExpression)
 	fmt.Printf("\nResult: %d\nError: %v\n", result, isError)
+
+	h1 := func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, strings.Join(arithmeticExpression, ""))
+		io.WriteString(w, fmt.Sprintf("\nExpression result: %d\n", result))
+	}
+	http.HandleFunc("/", h1)
+
+	log.Fatal(http.ListenAndServe(":8000", nil))
 }
