@@ -1,6 +1,6 @@
 # HMTX + Go Calculator
 
-Supported operations: + - * / %
+Supported operations: + - * /
 round brackets included
 
 ## Run
@@ -8,5 +8,5 @@ round brackets included
 In the source directory execute
 
 ```sh
-go run ./main.go Albert
+go run ./main.go "2 + 2 * 2"
 ```

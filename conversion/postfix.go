@@ -1,9 +1,11 @@
 package conversion
 
 import (
+	"fmt"
+	"strconv"
+
 	"calculator/operation"
 	"calculator/utils"
-	"fmt"
 )
 
 const rightRoundBracket = ")"
@@ -54,4 +56,52 @@ func BuildPostfix(infixExpr []string) ([]string, bool) {
 	}
 
 	return postfixExpr, false
+}
+
+func CalculateExpr(postfixExpr []string) (uint64, bool) {
+	var stack utils.Stack
+	var firstValueMet, secondValueMet, isError bool
+
+	for i := 0; i < len(postfixExpr); i++ {
+		lexem := postfixExpr[i]
+
+		switch lexem {
+		case "+", "-", "*", "/": // operations
+			if secondValueMet {
+				secondValue, _ := stack.Pop()
+				firstValue, _ := stack.Pop()
+
+				_operation := operation.New(firstValue.(uint64), secondValue.(uint64), uint8(lexem[0]))
+
+				fmt.Println("Operation:", _operation)
+
+				computeResult := operation.Compute(_operation)
+
+				stack.Push(computeResult)
+
+				if len(stack) < 1 {
+					firstValueMet, secondValueMet = false, false
+				}
+			}
+		default:
+			number, _ := strconv.Atoi(lexem) // convert string to int
+
+			if firstValueMet {
+				secondValueMet = true
+			} else {
+				firstValueMet = true
+			}
+
+			stack.Push(uint64(number))
+		}
+	}
+
+	result, _ := stack.Pop()
+
+	if !stack.IsEmpty() {
+		isError = true
+		fmt.Println("ERROR: INVALID EXPRESSION")
+	}
+
+	return result.(uint64), isError
 }
