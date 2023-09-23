@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// not found then 0 by default
 var OperationPriorities = map[string]int{
 	"+": 1,
 	"-": 1,
